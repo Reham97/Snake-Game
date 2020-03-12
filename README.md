@@ -1,2 +1,3 @@
 # Snake Game
- Snake Game Using HTML,CSS ang JS
+Snake Game Using JavaScript, and The HTML5 canvas.
+By following tutorial on youtube.
