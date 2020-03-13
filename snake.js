@@ -68,7 +68,74 @@ function collision(head,array){
     }
     return false;
 }
-
-
  
 
+// game logic
+function draw(){
+    if(!isPaused) {
+            ctx.drawImage(groundImage,0,0);
+            
+            for( let i = 0; i < snake.length ; i++){
+                ctx.fillStyle = ( i == 0 )? "green" : "white";
+                ctx.fillRect(snake[i].x,snake[i].y,box,box);
+                
+                ctx.strokeStyle = "red";
+                ctx.strokeRect(snake[i].x,snake[i].y,box,box);
+            }
+            
+            ctx.drawImage(foodImage, food.x, food.y);
+        
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if( directionPoint== "LEFT") snakeX -= box;
+            if( directionPoint== "UP") snakeY -= box;
+            if( directionPoint== "RIGHT") snakeX += box;
+            if( directionPoint== "DOWN") snakeY += box;
+            
+            // if the snake eats the food
+            if(snakeX == food.x && snakeY == food.y){
+                score++;
+                eat.play();
+                food = {
+                    x : Math.floor(Math.random()*17+1) * box,
+                    y : Math.floor(Math.random()*15+3) * box
+                }
+                // we don't remove the tail
+            }else{
+                // remove the tail
+                snake.pop();
+            }
+            
+        
+            let newHead = {
+                x : snakeX,
+                y : snakeY
+            }
+            
+            // game over
+            if(snakeX < box || snakeX > 17 * box || snakeY < 3*box || snakeY > 17*box || collision(newHead,snake)){
+            // clearInterval(game);
+            console.log("end");
+            isPaused=true;
+            //setTimeout(location.reload.bind(location), 6000);
+            dead.play();
+        
+
+            }
+            
+            snake.unshift(newHead);    
+            ctx.fillStyle = "white";
+            ctx.font = "45px Changa one";
+            ctx.fillText(score,2*box,1.6*box);
+        }
+        else
+        {
+            setTimeout(location.reload.bind(location), 2000);
+          
+        }
+}
+
+var isPaused = false;
+
+let game = setInterval(draw,100);
